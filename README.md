@@ -3,6 +3,7 @@
 ## Register Schema in Schema Registry
 
 ```sh
+docker exec -it kafka-cat bash
 cd /opt/data/hudi-kafka-connect-demo/
 sh register_stocks_schema.sh
 ```
@@ -10,6 +11,7 @@ sh register_stocks_schema.sh
 ## Send Sample messages to the Kafka
 
 ```sh
+docker exec -it kafka-cat bash
 cd /opt/data/hudi-kafka-connect-demo/
 sh generate_and_send_stocks_data_to_kafka.sh
 ```
@@ -17,6 +19,8 @@ sh generate_and_send_stocks_data_to_kafka.sh
 ## Register the Hudi Sink Connector
 
 ```sh
+docker exec -it kafka-connect bash
+
 cd /opt/data/hudi-kafka-connect-demo/
 
 curl -s http://localhost:8083/connectors | jq

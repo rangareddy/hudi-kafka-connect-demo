@@ -3,12 +3,16 @@ KAFKA_PORT=${KAFKA_PORT:-29092}
 KAFKA_TOPIC_NAME=${KAFKA_TOPIC_NAME:-"hudi-test-topic"}
 STOCKS_DATA_FILE=stocks_data.json
 EVENTS_FILE=${EVENTS_FILE:-"kafka_input_events"}
-numHudiPartitions=5
+NUM_OF_RECORDS=${NUM_OF_RECORDS:-10}
+NUM_OF_BATCHES=${NUM_OF_BATCHES:-2}
+NUM_OF_HUDI_PARTITIONS=${NUM_OF_HUDI_PARTITIONS:-3}
+
+numHudiPartitions=$NUM_OF_HUDI_PARTITIONS
+numBatch=$NUM_OF_BATCHES
+numRecords=$NUM_OF_RECORDS
 recordKey=volume
 partitionField=date
-numBatch=1
 recordValue=0
-numRecords=5
 
 # Generate kafka messages from raw records
 # Each records with unique keys and generate equal messages across each hudi partition
@@ -20,9 +24,8 @@ done
 totalNumRecords=$((numRecords + recordValue))
 
 for ((i = 1;i<=numBatch;i++)); do
-  rm -f ${EVENTS_FILE}
-  date
-  echo "Start batch $i ..."
+  rm -rf ${EVENTS_FILE}
+  echo "Sending messages to Kafka in batch $i on $date..."
   batchRecordSeq=0
   for (( ; ; )); do
     while IFS= read line; do
@@ -44,13 +47,13 @@ for ((i = 1;i<=numBatch;i++)); do
 
     if [ $batchRecordSeq -eq $numRecords ]; then
         date
-        echo " Record key until $recordValue"
+        echo "Record key until $recordValue"
         sleep 20
         break
       fi
   done
 
-  echo "Publish stocks data to Kafka topic ${KAFKA_TOPIC_NAME} ..."
+  echo "Publishing stock data to Kafka topic ${KAFKA_TOPIC_NAME}..."
   grep -v '^$' ${EVENTS_FILE} | kafkacat -b "${KAFKA_HOSTNAME}:${KAFKA_PORT}" -t "${KAFKA_TOPIC_NAME}" -T -P
 done
 
