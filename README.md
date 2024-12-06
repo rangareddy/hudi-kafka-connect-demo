@@ -4,14 +4,14 @@
 
 ```sh
 cd /opt/data/hudi-kafka-connect-demo/
-sh setup_schema_registry.sh
+sh register_stocks_schema.sh
 ```
 
 ## Send Sample messages to the Kafka
 
 ```sh
 cd /opt/data/hudi-kafka-connect-demo/
-sh generate_stocks_data.sh
+sh generate_and_send_stocks_data_to_kafka.sh
 ```
 
 ## Register the Hudi Sink Connector
