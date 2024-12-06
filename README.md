@@ -20,6 +20,7 @@ sh generate_stocks_data.sh
 cd /opt/data/hudi-kafka-connect-demo/
 
 curl -s http://localhost:8083/connectors | jq
+curl -s -X DELETE http://localhost:8083/connectors/hudi-sink-connector
 
 curl -X POST http://localhost:8083/connectors \
   -H "Content-Type:application/json" \
@@ -27,5 +28,33 @@ curl -X POST http://localhost:8083/connectors \
   -d @hudi-sink-connector.json
 
 curl -s http://localhost:8083/connectors/hudi-sink-connector/status | jq
+```
+
+```sh
+cd /opt/data/hudi-kafka-connect-demo/
+
+curl -s http://localhost:8083/connectors | jq
+curl -s -X DELETE http://localhost:8083/connectors/hudi-sink-connector-s3
+
+curl -X POST http://localhost:8083/connectors \
+  -H "Content-Type:application/json" \
+  -H "Accept:application/json" \
+  -d @hudi-sink-connector-s3.json
+
+curl -s http://localhost:8083/connectors/hudi-sink-connector-s3/status | jq
+```
+
+```sh
+cd /opt/data/hudi-kafka-connect-demo/
+
+curl -s http://localhost:8083/connectors | jq
+curl -s -X DELETE http://localhost:8083/connectors/hudi-sink-connector-s3-hive
+
+curl -X POST http://localhost:8083/connectors \
+  -H "Content-Type:application/json" \
+  -H "Accept:application/json" \
+  -d @hudi-sink-connector-s3-hive.json
+
+curl -s http://localhost:8083/connectors/hudi-sink-connector-s3-hive/status | jq
 ```
 
